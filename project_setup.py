@@ -15,13 +15,12 @@ def setup(project: mlrun.projects.MlrunProject) -> mlrun.projects.MlrunProject:
     project.set_secrets({"OPENAI_API_KEY": mlrun.get_secret_or_env("OPENAI_API_KEY"),
                          "OPENAI_BASE_URL": mlrun.get_secret_or_env("OPENAI_BASE_URL")})
 
-
     # Set project git/archive source and enable pulling latest code at runtime
     if source is None and not project.default_image:
-        shutil.make_archive('./banking_agent', 'zip', "./")
+        shutil.make_archive('../banking_agent', 'gztar', "./")
         # Logging as artifact
-        proj_artifact = project.log_artifact('project_zip', local_path='./banking_agent.zip', upload=True)
-        os.remove('./banking_agent.zip')
+        proj_artifact = project.log_artifact('project_source', local_path='../banking_agent.tar.gz', upload=True)
+        os.remove('../banking_agent.tar.gz')
         project.set_source(source=proj_artifact.target_path, pull_at_runtime=False)
         print(f"Project Source: {source}")
         source = proj_artifact.target_path
@@ -39,7 +38,9 @@ def setup(project: mlrun.projects.MlrunProject) -> mlrun.projects.MlrunProject:
                           'pandera==0.20.3',
                           'transformers==4.48.1',
                           'datasets==3.2.0',
-                          'torch==1.13.1'],)
+                          'torch==1.13.1'])
+    else:
+        project.set_default_image(f'.mlrun-project-image-{project.name}')
 
     # MLRun Functions
     project.set_function(
