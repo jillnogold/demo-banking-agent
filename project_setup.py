@@ -24,7 +24,7 @@ def setup(project: mlrun.projects.MlrunProject) -> mlrun.projects.MlrunProject:
     # Set project git/archive source and enable pulling latest code at runtime
     if not source:
         print("Setting Source for the demo:")
-        shutil.make_archive('../banking_agent', 'gztar', "./")
+        shutil.make_archive('../banking_agent', 'gztar', "./", ignore=shutil.ignore_patterns("project.yaml"))
         # Logging as artifact
         proj_artifact = project.log_artifact('project_source', local_path='../banking_agent.tar.gz', upload=True)
         os.remove('../banking_agent.tar.gz')
