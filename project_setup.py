@@ -16,7 +16,7 @@ def setup(project: mlrun.projects.MlrunProject) -> mlrun.projects.MlrunProject:
                          "OPENAI_BASE_URL": mlrun.get_secret_or_env("OPENAI_BASE_URL")})
 
     # Set project git/archive source and enable pulling latest code at runtime
-    if source:
+    if not source:
         print("Setting Source for the demo:")
         shutil.make_archive('../banking_agent', 'gztar', "./")
         # Logging as artifact
