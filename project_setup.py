@@ -32,6 +32,8 @@ def setup(project: mlrun.projects.MlrunProject) -> mlrun.projects.MlrunProject:
         print(f"Project Source: {source}")
         source = proj_artifact.target_path
         project.set_source(source, pull_at_runtime=False)
+    else:
+        project.set_source(source, pull_at_runtime=False)
 
     if default_image:
         project.set_default_image(default_image)
