@@ -1,5 +1,6 @@
 import os
 import shutil
+import tarfile
 import mlrun
 
 
@@ -24,7 +25,7 @@ def setup(project: mlrun.projects.MlrunProject) -> mlrun.projects.MlrunProject:
     # Set project git/archive source and enable pulling latest code at runtime
     if not source:
         print("Setting Source for the demo:")
-        shutil.make_archive('../banking_agent', 'gztar', "./", ignore=shutil.ignore_patterns("project.yaml"))
+        make_archive("../banking_agent", "gztar", "./", exclude=["project.yaml"])
         # Logging as artifact
         proj_artifact = project.log_artifact('project_source', local_path='../banking_agent.tar.gz', upload=True)
         os.remove('../banking_agent.tar.gz')
@@ -88,3 +89,29 @@ def setup(project: mlrun.projects.MlrunProject) -> mlrun.projects.MlrunProject:
     # Save and return the project:
     project.save()
     return project
+
+
+def make_archive(base_name, format="gztar", root_dir=".", exclude=None):
+    """
+    Create a tar.gz archive like shutil.make_archive but with exclusions.
+    
+    Args:
+        base_name (str): Output file name (without extension).
+        format (str): Archive format ("gztar", "tar").
+        root_dir (str): Root directory to archive.
+        exclude (list): Filenames (or directory names) to exclude.
+    """
+    exclude = set(exclude or [])
+    suffix = ".tar.gz" if format == "gztar" else ".tar"
+    archive_name = base_name + suffix
+
+    mode = "w:gz" if format == "gztar" else "w"
+    with tarfile.open(archive_name, mode) as tar:
+        for root, _, files in os.walk(root_dir):
+            for f in files:
+                if f in exclude:
+                    continue
+                path = os.path.join(root, f)
+                arcname = os.path.relpath(path, root_dir)
+                tar.add(path, arcname=arcname)
+    return archive_name
