@@ -14,6 +14,12 @@ def setup(project: mlrun.projects.MlrunProject) -> mlrun.projects.MlrunProject:
 
     project.set_secrets({"OPENAI_API_KEY": mlrun.get_secret_or_env("OPENAI_API_KEY"),
                          "OPENAI_BASE_URL": mlrun.get_secret_or_env("OPENAI_BASE_URL")})
+    
+    print(f'source : {source}')
+    print(f'build_image : {build_image}')
+    print(f'default_image : {default_image}')
+    print(f'project.default_image : {project.default_image}')
+    print(f'project.source : {project.source}')
 
     # Set project git/archive source and enable pulling latest code at runtime
     if not source:
@@ -25,6 +31,7 @@ def setup(project: mlrun.projects.MlrunProject) -> mlrun.projects.MlrunProject:
         project.set_source(source=proj_artifact.target_path, pull_at_runtime=False)
         print(f"Project Source: {source}")
         source = proj_artifact.target_path
+        project.set_source(source, pull_at_runtime=False)
 
     if default_image:
         project.set_default_image(default_image)
@@ -32,7 +39,6 @@ def setup(project: mlrun.projects.MlrunProject) -> mlrun.projects.MlrunProject:
     # Set default project docker image - functions that do not specify image will use this
     if build_image:    
         print("Building default image for the demo:")
-        project.set_source(source, pull_at_runtime=False)    
         project.build_image(
             image=default_image,
             base_image='mlrun/mlrun-kfp',
