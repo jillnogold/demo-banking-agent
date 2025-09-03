@@ -527,11 +527,11 @@ class BankingAgent(V2ModelServer):
         for m in resp["messages"]:
             md = m.dict()
             if "tool_calls" in md and md["tool_calls"]:
-            for t in md["tool_calls"]:
-                tool_calls[t["id"]] = {
-                "title": f"🛠️ Used tool {t['name']}: {t['args']['query']}"
-                }
+                for t in md["tool_calls"]:
+                    tool_calls[t["id"]] = {
+                    "title": f"🛠️ Used tool {t['name']}: {t['args']['query']}"
+                    }
             if "tool_call_id" in md and md["tool_call_id"] in tool_calls:
-            tool_calls[md["tool_call_id"]]["content"] = md["content"]
+                tool_calls[md["tool_call_id"]]["content"] = md["content"]
 
         return {"response": [response], "tool_calls": list(tool_calls.values())}
