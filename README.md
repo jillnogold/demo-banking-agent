@@ -44,6 +44,8 @@ The banking agent demo architecture is customizable, with observability for proj
 ## Prerequisites
 - Minimum of 6 CPUs 
 
+## Installation guide
+
 1. Install dependencies:
 
    ```bash
@@ -55,15 +57,17 @@ The banking agent demo architecture is customizable, with observability for proj
    
    Be sure to use this conda environment as the kernel for the following Juypter notebooks.
 
-2. Set up MLRun:
-
-    [Configure MLRun](https://docs.mlrun.org/en/stable/install.html) with access to your cluster or local environment.
+2. Install and set up MLRun:
+   ```python
+   import mlrun
+   ```
+  [Configure MLRun](https://docs.mlrun.org/en/stable/install.html) with access to your cluster or local environment.
 
 3. Set OpenAI credentials
 
-    Copy the [env file](.env.example) as `ai_gateway.env` and update to include:
-    - `OPENAI_API_KEY`: Your OpenAI API key.
-    - `OPENAI_BASE_URL`: The base URL for OpenAI API.
+  Copy the [env file](.env.example) as `ai_gateway.env` and update to include:
+  - `OPENAI_API_KEY`: Your OpenAI API key.
+  - `OPENAI_BASE_URL`: The base URL for OpenAI API.
 
 
 ## Demo flow
